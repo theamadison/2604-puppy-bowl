@@ -85,10 +85,47 @@ function PlayerListItem(party) {
   }
 
   $li.innerHTML = `
-    <a href="#selected">${player.name}</a>
-  `;
+    <a href="#selected">$
+        <img alt"${player.name}" src="${player.imageUrl}" />
+        ${player.name}</a>
+    `;
   $li.addEventListener("click", () => getPlayer(player.id));
   return $li;
+}
+
+function PlayerList() {
+  const $ul = document.createElement("ul");
+  $ul.classList.add("players");
+
+  const $players = players.map(PlayerListItem);
+  $ul.replaceChildren(...$players);
+
+  return $ul;
+}
+
+function selectedPlayer(selectedPlayer) {
+  if (!selectedPlayer) {
+    const $p = document.createElement("p");
+    $p.textContent = "Select a player to learn more about them.";
+    return $p;
+  }
+
+  const $player = document.createElement("section");
+  $player.innerHTML = `
+    <h3>${selectedPlayer.name} #${selectedPlayer.id}</h3>
+
+    <p><strong>Breed:</strong> ${selectedPlayer.breed}</p>
+
+    <p><strong>Team:</strong> ${selectedPlayer.team}</p>
+
+    <p><strong>Status:</strong> ${selectedPlayer.status}</p>
+  `;
+  $player.querySelector("PlayerList").replaceWith(PlayerList());
+
+  const $delete = $player.querySelector("button");
+  $delete.addEventListener("click", () => deletePlayer(selectedPlayer.id));
+
+  return $player;
 }
 
 // ===RENDER===
