@@ -4,28 +4,31 @@ const COHORT = "/2406-THEA";
 const API = BASE + COHORT;
 
 // ===STATE===
-// Since we are going to be changing their values later, the declaration needed is let
+/** Since we are going to be changing their values later, the declaration needed is let */
 let players = [];
 let selectedPlayer;
 let teams = [];
 
-// Updates the state with all the puppies from the API
-// Because we are making a request that takes time to respond, our function must be asynchronous
+/** Updates the state with all the puppies from the API */
+/** Because we are making a request that takes time to respond, our function must be asynchronous*/
 async function getPlayers() {
-  // Since we are working with a Promise, we have to try making the request
+  /**  Since we are working with a Promise, we have to try making the request */
   try {
-    // The term `await` means wait for the promise to resolve
-    // The term `fetch` means make GET request to specified path
+    /** The term `await` means wait for the promise to resolve */
+    /** The term `fetch` means make GET request to specified path */
     const response = await fetch(API + "/players");
-    // After the resoponse comes back, I have parse the JSON into an actual object
+    /** After the resoponse comes back, I have parse the JSON into an actual object */
     const result = await response.json();
     players = result.data.players;
+    /** We have to make sure the website is showing the updated version, so therfore we have to `render` */
     render();
+    /** In case there are any errors, we must catch the error in advance to prevent our website from crashing */
   } catch (e) {
     console.error(e);
   }
 }
 
+/** Updates the state with a single player from the API */
 async function getPlayer(id) {
   try {
     const response = await fetch(API + "/players/" + id);
@@ -39,6 +42,7 @@ async function getPlayer(id) {
   }
 }
 
+/** Updates the state with the teams from the API */
 async function getTeams() {
   try {
     const response = await fetch(API + "/teams");
@@ -50,6 +54,7 @@ async function getTeams() {
   }
 }
 
+/**  Creates a player via the API */
 async function addPlayer(player) {
   try {
     await fetch(API + "/players", {
@@ -65,6 +70,7 @@ async function addPlayer(player) {
   }
 }
 
+/** Deletes the selected player using the given ID via the API */
 async function deletePlayer(id) {
   try {
     await fetch(API + "/players/" + id, {
@@ -79,6 +85,7 @@ async function deletePlayer(id) {
 
 // ===COMPONENTS===
 
+/** Player name that shows more details about the selected player */
 function PlayerListItem(player) {
   const $li = document.createElement("li");
 
@@ -95,6 +102,7 @@ function PlayerListItem(player) {
   return $li;
 }
 
+/** A list of names of all the players */
 function PlayerList() {
   const $ul = document.createElement("ul");
   $ul.classList.add("players");
@@ -105,6 +113,7 @@ function PlayerList() {
   return $ul;
 }
 
+/** Detailed information about the selected player */
 function SelectedPlayer() {
   if (!selectedPlayer) {
     const $p = document.createElement("p");
@@ -143,6 +152,7 @@ function SelectedPlayer() {
   return $player;
 }
 
+/** Form that allows users to input information about a new player */
 function NewPlayerForm() {
   const $form = document.createElement("form");
   $form.innerHTML = `
